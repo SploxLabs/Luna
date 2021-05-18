@@ -1,12 +1,10 @@
 #include "DSAudioEngine.h"
 
-DSAudioEngine::DSAudioEngine()
-{
+DSAudioEngine::DSAudioEngine() {
 	//do-nothing
 }
 
-DSAudioEngine::DSAudioEngine(HWND WINDOW_HANDLE)
-{
+DSAudioEngine::DSAudioEngine(HWND WINDOW_HANDLE) {
 	hwnd = WINDOW_HANDLE;
 	sounds.clear();
 	sound_device = 0;
@@ -19,12 +17,10 @@ DSAudioEngine::DSAudioEngine(HWND WINDOW_HANDLE)
 	Init();
 }
 
-DSAudioEngine::~DSAudioEngine()
-{
+DSAudioEngine::~DSAudioEngine(){
 }
 
-void DSAudioEngine::Init()
-{
+void DSAudioEngine::Init() {
 	/* Create the Sound Device to the Defualt sound device of the computer*/
 	ThrowIfFailed(DirectSoundCreate8(
 		NULL,
@@ -63,8 +59,7 @@ void DSAudioEngine::Init()
 	LoadSounds();
 }
 
-void DSAudioEngine::LoadSounds()
-{
+void DSAudioEngine::LoadSounds() {
 	loadWavFileToBuffer((char*)"34012__erh__cinematic-deep-bass-rumble.wav", &ambience);
 	loadWavFileToBuffer((char*)"158894__primeval-polypod__rocket-launch_01.wav", &rcs);
 	loadWavFileToBuffer((char*)"318688__limitsnap-creations__rocket-thrust-effect.wav", &thruster);
@@ -80,8 +75,7 @@ void DSAudioEngine::LoadSounds()
 	
 }
 
-void DSAudioEngine::loadWavFileToBuffer(char* filename, IDirectSoundBuffer8** Buffer)
-{
+void DSAudioEngine::loadWavFileToBuffer(char* filename, IDirectSoundBuffer8** Buffer) {
 	int error;
 	FILE* filePtr;
 	unsigned int count;
@@ -101,53 +95,37 @@ void DSAudioEngine::loadWavFileToBuffer(char* filename, IDirectSoundBuffer8** Bu
 
 	// Check that the chunk ID is the RIFF format.
 	if ((waveFileHeader.chunkId[0] != 'R') || (waveFileHeader.chunkId[1] != 'I') ||
-		(waveFileHeader.chunkId[2] != 'F') || (waveFileHeader.chunkId[3] != 'F'))
-	{
+		(waveFileHeader.chunkId[2] != 'F') || (waveFileHeader.chunkId[3] != 'F')) {
 		throw "loading .wav failed";
 	}
 
 	// Check that the file format is the WAVE format.
 	if ((waveFileHeader.format[0] != 'W') || (waveFileHeader.format[1] != 'A') ||
-		(waveFileHeader.format[2] != 'V') || (waveFileHeader.format[3] != 'E'))
-	{
+		(waveFileHeader.format[2] != 'V') || (waveFileHeader.format[3] != 'E')) {
 		throw "loading .wav failed";
 	}
 
 	// Check that the sub chunk ID is the fmt format.
 	if ((waveFileHeader.subChunkId[0] != 'f') || (waveFileHeader.subChunkId[1] != 'm') ||
-		(waveFileHeader.subChunkId[2] != 't') || (waveFileHeader.subChunkId[3] != ' '))
-	{
+		(waveFileHeader.subChunkId[2] != 't') || (waveFileHeader.subChunkId[3] != ' ')) {
 		throw "loading .wav failed";
 	}
 
 	// Check that the audio format is WAVE_FORMAT_PCM.
-	if (waveFileHeader.audioFormat != WAVE_FORMAT_PCM)
-	{
-		throw "loading .wav failed";
-	}
+	if (waveFileHeader.audioFormat != WAVE_FORMAT_PCM) { throw "loading .wav failed"; }
 
 	// Check that the wave file was recorded in stereo format.
-	if (waveFileHeader.numChannels != 2)
-	{
-		throw "loading .wav failed";
-	}
+	if (waveFileHeader.numChannels != 2) { throw "loading .wav failed"; }
 
 	// Check that the wave file was recorded at a sample rate of 44.1 KHz.
-	if (waveFileHeader.sampleRate != 44100)
-	{
-		throw "loading .wav failed";
-	}
+	if (waveFileHeader.sampleRate != 44100) { throw "loading .wav failed"; }
 
 	// Ensure that the wave file was recorded in 16 bit format.
-	if (waveFileHeader.bitsPerSample != 16)
-	{
-		throw "loading .wav failed";
-	}
+	if (waveFileHeader.bitsPerSample != 16) { throw "loading .wav failed"; }
 
 	// Check for the data chunk header.
 	if ((waveFileHeader.dataChunkId[0] != 'd') || (waveFileHeader.dataChunkId[1] != 'a') ||
-		(waveFileHeader.dataChunkId[2] != 't') || (waveFileHeader.dataChunkId[3] != 'a'))
-	{
+		(waveFileHeader.dataChunkId[2] != 't') || (waveFileHeader.dataChunkId[3] != 'a')){
 		throw "loading .wav failed";
 	}
 
@@ -184,17 +162,11 @@ void DSAudioEngine::loadWavFileToBuffer(char* filename, IDirectSoundBuffer8** Bu
 
 	// Create a temporary buffer to hold the wave file data.
 	waveData = new unsigned char[waveFileHeader.dataSize];
-	if (!waveData)
-	{
-		throw "loading .wav failed";
-	}
+	if (!waveData) { throw "loading .wav failed"; }
 
 	// Read in the wave file data into the newly created buffer.
 	count = fread(waveData, 1, waveFileHeader.dataSize, filePtr);
-	if (count != waveFileHeader.dataSize)
-	{
-		throw "loading .wav failed";
-	}
+	if (count != waveFileHeader.dataSize) { throw "loading .wav failed"; }
 
 	// Close the file once done reading.
 	error = fclose(filePtr);

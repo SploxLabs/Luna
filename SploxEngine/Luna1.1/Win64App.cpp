@@ -61,11 +61,9 @@ int Win64App::Run() {
     //audio_engine.alarm->Play(0, 0, DSBPLAY_LOOPING);
 
     MSG msg = {};
-    while (msg.message != WM_QUIT)
-    {
+    while (msg.message != WM_QUIT) {
         // Process any messages in the queue.
-        if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
-        {
+        if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
             TranslateMessage(&msg);
             DispatchMessage(&msg);
         }
@@ -79,11 +77,7 @@ LRESULT Win64App::WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 
     switch (message) {
     case WM_KEYDOWN:
-        if (wParam == VK_ESCAPE) 
-        {
-            PostQuitMessage(0);    
-        }
-
+        if (wParam == VK_ESCAPE) { PostQuitMessage(0); }
         if (wParam == 0x57) { graphics_engine->camera_rb.roll_left = true; } //A
         if (wParam == 0x53) { graphics_engine->camera_rb.roll_right = true; } //Ddd
         if (wParam == 0x44) { graphics_engine->camera_rb.pitch_up = true; } //S
@@ -91,11 +85,9 @@ LRESULT Win64App::WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
         if (wParam == 0x51) { graphics_engine->camera_rb.yaw_left = true; } //Q
         if (wParam == 0x45) { graphics_engine->camera_rb.yaw_right = true; } //E
 
-        if (wParam == VK_SPACE) 
-        { 
+        if (wParam == VK_SPACE) { 
             graphics_engine->camera_rb.thurster_activation = true;
-            if (graphics_engine->camera_rb.fuel > 0) 
-            {
+            if (graphics_engine->camera_rb.fuel > 0) {
                 audio_engine.thruster->SetVolume(-2000);  
             }
         };
@@ -107,7 +99,6 @@ LRESULT Win64App::WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
             graphics_engine->camera_rb.yaw_left ||
             graphics_engine->camera_rb.yaw_right) 
         {
-
             audio_engine.rcs->SetVolume(-2000);
         }
         return 0;
@@ -132,8 +123,7 @@ LRESULT Win64App::WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
         };
         return 0;
     case WM_PAINT:
-        if (graphics_engine) 
-        {
+        if (graphics_engine) {
             graphics_engine->Update();
             graphics_engine->Render();
         }

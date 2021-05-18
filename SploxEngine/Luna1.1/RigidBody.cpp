@@ -1,16 +1,12 @@
 #include "RigidBody.h"
 
-XMVECTOR RigidBody::GetOrientation()
-{
+XMVECTOR RigidBody::GetOrientation() {
 	XMVECTOR forward = XMVectorSet(0, 0, 1, 0);
-
 	XMMATRIX rotation = XMMatrixRotationRollPitchYaw(orientation.x, orientation.y, orientation.z);
-
 	return XMVector3Transform(forward, rotation);
 }
 
-void RigidBody::Update(float DT)
-{
+void RigidBody::Update(float DT) {
 	/* translational forces and updates */
 	XMVECTOR pos = XMLoadFloat3(&position);
 	XMVECTOR vel = XMLoadFloat3(&velocity);

@@ -1,8 +1,7 @@
 #include "pch.h"
 #include "DX12GraphicsEngine.h"
 #include "DSAudioEngine.h"
-class Win64App
-{
+class Win64App {
 public:
 	Win64App(DX12GraphicsEngine* Engine, UINT Height, UINT Width, HINSTANCE hInstance, int nCmdShow);
 	static int Run();

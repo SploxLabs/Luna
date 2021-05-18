@@ -3,8 +3,7 @@
 #include <DirectXMath.h>
 using namespace DirectX;
 
-class RigidBody
-{
+class RigidBody {
 public:
 	XMFLOAT3 position; //m
 	XMFLOAT3 velocity; //m/s

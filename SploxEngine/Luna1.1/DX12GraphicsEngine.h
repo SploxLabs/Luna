@@ -4,8 +4,7 @@
 using namespace Microsoft::WRL;
 using namespace DirectX;
 
-class DX12GraphicsEngine
-{
+class DX12GraphicsEngine {
 public:
 	DX12GraphicsEngine();
 	~DX12GraphicsEngine();
@@ -45,8 +44,7 @@ private:
 	CD3DX12_RECT scissor_rect;
 
 	//Scene Objects
-	struct Vertex
-	{
+	struct Vertex {
 		Vertex(XMFLOAT3 POS, XMFLOAT4 COLOR) {
 			position = POS;
 			color = COLOR;
@@ -55,13 +53,11 @@ private:
 		XMFLOAT4 color;
 	};
 
-	struct SceneConstantBuffer
-	{
+	struct SceneConstantBuffer {
 		XMFLOAT4 offset;
 	};
 
-	struct CameraConstant
-	{
+	struct CameraConstant {
 		XMFLOAT4X4 world_view_proj;
 	};
 
@@ -130,8 +126,7 @@ private:
 	bool paused;
 };
 
-inline XMFLOAT4X4 Identity4x4()
-{
+inline XMFLOAT4X4 Identity4x4() {
 	static DirectX::XMFLOAT4X4 I(
 		1.0f, 0.0f, 0.0f, 0.0f,
 		0.0f, 1.0f, 0.0f, 0.0f,

@@ -3,8 +3,7 @@
 
 using namespace Microsoft::WRL;
 
-class DSAudioEngine
-{
+class DSAudioEngine {
 public:
 	DSAudioEngine();
 	DSAudioEngine(HWND WINDOW_HANDLE);
@@ -34,8 +33,7 @@ public:
 
 private:
 
-	struct WaveHeaderType
-	{
+	struct WaveHeaderType {
 		char chunkId[4];
 		unsigned long chunkSize;
 		char format[4];

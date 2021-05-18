@@ -2,8 +2,8 @@
 
 DX12GraphicsEngine::DX12GraphicsEngine() :
 	frame_index(0),
-	first_update(TRUE)
-{
+	first_update(TRUE) {
+
 	start = clock.now();
 	last_update = clock.now();
 	camera_constant.world_view_proj = Identity4x4();
@@ -45,14 +45,12 @@ DX12GraphicsEngine::~DX12GraphicsEngine() {
 	Destroy(); 
 }
 
-void DX12GraphicsEngine::Init()
-{
+void DX12GraphicsEngine::Init(){
 	InitPipline();
 	InitAssets();
 }
 
-void DX12GraphicsEngine::Update()
-{
+void DX12GraphicsEngine::Update() {
 	if (camera_rb.position.y < camera_rb.radius) { 
 		paused = true;
 		if (abs(camera_rb.velocity.y) < 5.0f) {
@@ -82,8 +80,7 @@ void DX12GraphicsEngine::Update()
 	}
 }
 
-void DX12GraphicsEngine::Render()
-{
+void DX12GraphicsEngine::Render() {
 	// Record all the commands we need to render the scene into the command list.
 	PopulateCommandList();
 
@@ -97,8 +94,7 @@ void DX12GraphicsEngine::Render()
 	MoveToNextFrame();
 }
 
-void DX12GraphicsEngine::Destroy()
-{
+void DX12GraphicsEngine::Destroy() {
 	// Ensure that the GPU is no longer referencing resources that are about to be
 	// cleaned up by the destructor.
 	FlushCommandQueue();
@@ -106,8 +102,7 @@ void DX12GraphicsEngine::Destroy()
 	CloseHandle(fence_event);
 }
 
-void DX12GraphicsEngine::UpdateClientDimensions()
-{
+void DX12GraphicsEngine::UpdateClientDimensions() {
 	RECT tmp_rect;
 	GetClientRect(render_window, &tmp_rect);//store ClientRect info from render window into tmp_rect
 	client_height = tmp_rect.bottom - tmp_rect.top; //calc & store client height from tmp_rect
@@ -116,8 +111,7 @@ void DX12GraphicsEngine::UpdateClientDimensions()
 	assert(client_width > 0); //error check client_width
 }
 
-void DX12GraphicsEngine::UpdateHud()
-{
+void DX12GraphicsEngine::UpdateHud() {
 	/* Create the HUD Vertex Buffer */
 	//line stuff
 	{
@@ -210,8 +204,7 @@ void DX12GraphicsEngine::UpdateHud()
 	
 
 }
-void DX12GraphicsEngine::UpdateCameraMartrix()
-{
+void DX12GraphicsEngine::UpdateCameraMartrix() {
 	// Build the view matrix.
 	XMVECTOR pos = XMLoadFloat3(&camera_rb.position);
 	XMVECTOR target = XMVectorAdd(pos, camera_rb.GetOrientation());
@@ -228,8 +221,7 @@ void DX12GraphicsEngine::UpdateCameraMartrix()
 	memcpy(constant_buffer_data_begin, &camera_constant, sizeof(camera_constant));
 }
 
-void DX12GraphicsEngine::InitPipline()
-{
+void DX12GraphicsEngine::InitPipline() {
 	/* Sample Desc (USED IN MULTIPLE AREAS AND MUST BE SAME)*/
 	DXGI_SAMPLE_DESC SAMPLE_DESC = {};
 	SAMPLE_DESC.Count = SAMPLE_COUNT;
@@ -345,8 +337,7 @@ void DX12GraphicsEngine::InitPipline()
 
 }
 
-void DX12GraphicsEngine::InitAssets()
-{
+void DX12GraphicsEngine::InitAssets() {
 	UpdateClientDimensions();
 	view_port = CD3DX12_VIEWPORT(
 		0.0f,
@@ -781,8 +772,7 @@ void DX12GraphicsEngine::InitAssets()
 }
 
 // Prepare to render the next frame.
-void DX12GraphicsEngine::MoveToNextFrame()
-{
+void DX12GraphicsEngine::MoveToNextFrame() {
 	// Schedule a Signal command in the queue.
 	const UINT64 currentFenceValue = fence_values[frame_index];
 	ThrowIfFailed(command_queue->Signal(fence.Get(), currentFenceValue));
@@ -801,8 +791,7 @@ void DX12GraphicsEngine::MoveToNextFrame()
 	fence_values[frame_index] = currentFenceValue + 1;
 }
 
-void DX12GraphicsEngine::FlushCommandQueue()
-{
+void DX12GraphicsEngine::FlushCommandQueue() {
 	// Schedule a Signal command in the queue.
 	ThrowIfFailed(command_queue->Signal(fence.Get(), fence_values[frame_index]));
 
@@ -815,8 +804,7 @@ void DX12GraphicsEngine::FlushCommandQueue()
 }
 
 
-void DX12GraphicsEngine::PopulateCommandList()
-{
+void DX12GraphicsEngine::PopulateCommandList() {
 	// Command list allocators can only be reset when the associated 
 	// command lists have finished execution on the GPU; apps should use 
 	// fences to determine GPU execution progress.
@@ -916,8 +904,7 @@ void DX12GraphicsEngine::PopulateCommandList()
 	FlushCommandQueue();
 }
 
-std::vector<DX12GraphicsEngine::Vertex> DX12GraphicsEngine::GenerateCraterAtPos(float SIZE, XMFLOAT2 POS, XMFLOAT4 COLOR)
-{
+std::vector<DX12GraphicsEngine::Vertex> DX12GraphicsEngine::GenerateCraterAtPos(float SIZE, XMFLOAT2 POS, XMFLOAT4 COLOR) {
 	std::vector<Vertex> verts = 
 	{
 		Vertex({POS.x + SIZE, 0, POS.y + SIZE }, COLOR),
