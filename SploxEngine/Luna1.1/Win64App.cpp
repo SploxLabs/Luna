@@ -77,20 +77,33 @@ LRESULT Win64App::WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 
     switch (message) {
     case WM_KEYDOWN:
-        if (wParam == VK_ESCAPE) { PostQuitMessage(0); }
-        if (wParam == 0x57) { graphics_engine->camera_rb.roll_left = true; } //A
-        if (wParam == 0x53) { graphics_engine->camera_rb.roll_right = true; } //Ddd
-        if (wParam == 0x44) { graphics_engine->camera_rb.pitch_up = true; } //S
-        if (wParam == 0x41) { graphics_engine->camera_rb.pitch_down = true; } //W
-        if (wParam == 0x51) { graphics_engine->camera_rb.yaw_left = true; } //Q
-        if (wParam == 0x45) { graphics_engine->camera_rb.yaw_right = true; } //E
-
-        if (wParam == VK_SPACE) { 
+        switch (wParam) {
+        case 0x41: //w
+            graphics_engine->camera_rb.pitch_down = true;
+            break;
+        case 0x57: //a
+            graphics_engine->camera_rb.roll_left = true;
+            break;
+        case 0x44: //s
+            graphics_engine->camera_rb.pitch_up = true;
+            break;
+        case 0x53: //d
+            graphics_engine->camera_rb.roll_right = true;
+            break;
+        case 0x51: //q
+            graphics_engine->camera_rb.yaw_left = true;
+            break;
+        case 0x45: //e
+            graphics_engine->camera_rb.yaw_right = true;
+            break;
+        case VK_SPACE: //space
             graphics_engine->camera_rb.thurster_activation = true;
-            if (graphics_engine->camera_rb.fuel > 0) {
-                audio_engine.thruster->SetVolume(-2000);  
-            }
-        };
+            audio_engine.thruster->SetVolume(-2000);
+            break;
+        case VK_ESCAPE: //esc
+            PostQuitMessage(0);
+            break;
+        }
 
         if (graphics_engine->camera_rb.roll_left ||
             graphics_engine->camera_rb.roll_right ||
@@ -103,12 +116,31 @@ LRESULT Win64App::WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
         }
         return 0;
     case WM_KEYUP:
-        if (wParam == 0x57) { graphics_engine->camera_rb.roll_left = false; } //A
-        if (wParam == 0x53) { graphics_engine->camera_rb.roll_right = false; } //D
-        if (wParam == 0x44) { graphics_engine->camera_rb.pitch_up = false; } //S
-        if (wParam == 0x41) { graphics_engine->camera_rb.pitch_down = false; } //W
-        if (wParam == 0x51) { graphics_engine->camera_rb.yaw_left = false; } //Q
-        if (wParam == 0x45) { graphics_engine->camera_rb.yaw_right = false; } //E
+        switch (wParam) {
+        case 0x41: //w
+            graphics_engine->camera_rb.pitch_down = false;
+            break;
+        case 0x57: //a
+            graphics_engine->camera_rb.roll_left = false;
+            break;
+        case 0x44: //s
+            graphics_engine->camera_rb.pitch_up = false;
+            break;
+        case 0x53: //d
+            graphics_engine->camera_rb.roll_right = false;
+            break;
+        case 0x51: //q
+            graphics_engine->camera_rb.yaw_left = false;
+            break;
+        case 0x45: //e
+            graphics_engine->camera_rb.yaw_right = false;
+            break;
+        case VK_SPACE: //space
+            graphics_engine->camera_rb.thurster_activation = false;
+            audio_engine.thruster->SetVolume(DSBVOLUME_MIN);
+            break;
+        }
+
         if (!graphics_engine->camera_rb.roll_left &&
             !graphics_engine->camera_rb.roll_right &&
             !graphics_engine->camera_rb.pitch_up &&
@@ -117,17 +149,16 @@ LRESULT Win64App::WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
             !graphics_engine->camera_rb.yaw_right) {
             audio_engine.rcs->SetVolume(DSBVOLUME_MIN);
         }
-        if (wParam == VK_SPACE) {
-            graphics_engine->camera_rb.thurster_activation = false;
-            audio_engine.thruster->SetVolume(DSBVOLUME_MIN);
-        };
+  
         return 0;
+
     case WM_PAINT:
         if (graphics_engine) {
             graphics_engine->Update();
             graphics_engine->Render();
         }
         return 0;
+
     case WM_DESTROY:
         PostQuitMessage(0);
         return 0;
