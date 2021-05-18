@@ -15,6 +15,8 @@ Win64App::Win64App(DX12GraphicsEngine* Engine, UINT Width, UINT Height, HINSTANC
     windowClass.lpfnWndProc = WindowProc;
     windowClass.hInstance = hInstance;
     windowClass.hCursor = LoadCursor(NULL, IDC_ARROW);
+    windowClass.hIcon = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_SPLOXICON));
+    windowClass.hIconSm = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_SPLOXICON));
     windowClass.lpszClassName = L"DXSampleClass";
     RegisterClassEx(&windowClass);
 

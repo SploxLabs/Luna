@@ -34,3 +34,8 @@
 #pragma region Physics
 #include "RigidBody.h"
 #pragma endregion
+
+/* Resources */
+#pragma region Resources
+#include "resource.h"
+#pragma endregion

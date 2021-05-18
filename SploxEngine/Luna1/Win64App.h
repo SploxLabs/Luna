@@ -1,3 +1,4 @@
+#include <Windows.h>
 #include "DX12GraphicsEngine.h"
 #include "DSAudioEngine.h"
 
@@ -10,7 +11,7 @@ public:
 	static LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 private:
 	static HWND window_handle;
-	DX12GraphicsEngine* graphics_engine;
+	static DX12GraphicsEngine* graphics_engine;
 	static DSAudioEngine audio_engine;
 
 };

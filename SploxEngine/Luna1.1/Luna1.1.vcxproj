@@ -74,7 +74,7 @@
       <ConformanceMode>Default</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <PrecompiledHeader>Create</PrecompiledHeader>
+      <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
@@ -86,13 +86,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\Luna1\Win64App.h" />
     <ClInclude Include="d3dx12.h" />
     <ClInclude Include="Debuger.h" />
     <ClInclude Include="DSAudioEngine.h" />
     <ClInclude Include="DX12GraphicsEngine.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="RigidBody.h" />
+    <ClInclude Include="Win64App.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DSAudioEngine.cpp" />
@@ -100,6 +101,12 @@
     <ClCompile Include="RigidBody.cpp" />
     <ClCompile Include="Win64App.cpp" />
     <ClCompile Include="WinMain.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Luna1.1.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Splox.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
