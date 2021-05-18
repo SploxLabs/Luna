@@ -5,11 +5,10 @@ HWND Win64App::window_handle = nullptr;
 DX12GraphicsEngine* Win64App::graphics_engine = nullptr;
 DSAudioEngine Win64App::audio_engine = DSAudioEngine();
 
-Win64App::Win64App(DX12GraphicsEngine* Engine, UINT Height, UINT Width, HINSTANCE hInstance, int nCmdShow)
-{
-    
+Win64App::Win64App(DX12GraphicsEngine* Engine, UINT Width, UINT Height, HINSTANCE hInstance, int nCmdShow) {
     graphics_engine = Engine;
-    // Initialize the window class.
+
+    /* Build and Register Window Class */
     WNDCLASSEX windowClass = { 0 };
     windowClass.cbSize = sizeof(WNDCLASSEX);
     windowClass.style = CS_HREDRAW | CS_VREDRAW;
@@ -19,31 +18,32 @@ Win64App::Win64App(DX12GraphicsEngine* Engine, UINT Height, UINT Width, HINSTANC
     windowClass.lpszClassName = L"DXSampleClass";
     RegisterClassEx(&windowClass);
 
-    RECT windowRect = { 0, 0, static_cast<LONG>(Width), static_cast<LONG>(Height) };
-    AdjustWindowRect(&windowRect, WS_OVERLAPPEDWINDOW, FALSE);
-
-    // Create the window and store a handle to it.
+    /* Create Window from Window Class*/
     window_handle = CreateWindowEx(
         WS_EX_CLIENTEDGE,
         windowClass.lpszClassName,
-        L"window_name",
+        L"Win64App.h",
         WS_SYSMENU,
-        0, 0,
-        Width, Height,
-        nullptr,        // We have no parent window.
-        nullptr,        // We aren't using menus.
+        CW_USEDEFAULT, CW_USEDEFAULT, Width, Height, //Dimensions
+        nullptr, // We have no parent window.
+        nullptr, // We aren't using menus.
         hInstance,
         NULL);//might be bad
 
+    /* Pass window handle to graphics engine and Initialize*/
     graphics_engine->render_window = window_handle;
     graphics_engine->Init();
 
+    /* Pass window handle to audio engine */
     audio_engine = DSAudioEngine(window_handle);
-    ShowWindow(window_handle, nCmdShow);
+   
 }
 
-int Win64App::Run()
-{
+int Win64App::Run() {
+
+    /* Show Window */
+    ShowWindow(window_handle, SW_SHOW);
+
     SetWindowText(window_handle, L"[REORIENT CRAFT-> (Roll(Q,E), Pitch(W,S), Yaw(A,D)),  SLOW DESCENT->(Thruster(SPACE) WARNING: MANAGE FUEL RESERVE (20s)] ");
     ShowWindow(window_handle, SW_SHOW);
     // Main sample loop.
@@ -71,17 +71,14 @@ int Win64App::Run()
     return static_cast<char>(msg.wParam);
 }
 
-LRESULT Win64App::WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
-{
+LRESULT Win64App::WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
 
     //DX12GraphicsEngine* tmp_graphics_engine = reinterpret_cast<DX12GraphicsEngine*>(GetWindowLongPtr(hWnd, GWLP_USERDATA));
-    if (graphics_engine->camera_rb.fuel < 0) 
-    {
+    if (graphics_engine->camera_rb.fuel < 0) {
         audio_engine.thruster->Stop();
     }
 
-    switch (message)
-    {
+    switch (message) {
     case WM_KEYDOWN:
         if (wParam == VK_ESCAPE) 
         {

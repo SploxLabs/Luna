@@ -10,7 +10,7 @@ public:
 	static LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 private:
 	static HWND window_handle;
-	static DX12GraphicsEngine* graphics_engine;
+	DX12GraphicsEngine* graphics_engine;
 	static DSAudioEngine audio_engine;
 
 };
