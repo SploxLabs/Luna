@@ -75,10 +75,7 @@ int Win64App::Run() {
 
 LRESULT Win64App::WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
 
-    //DX12GraphicsEngine* tmp_graphics_engine = reinterpret_cast<DX12GraphicsEngine*>(GetWindowLongPtr(hWnd, GWLP_USERDATA));
-    if (graphics_engine->camera_rb.fuel < 0) {
-        audio_engine.thruster->Stop();
-    }
+    if (graphics_engine->camera_rb.fuel < 0) { audio_engine.thruster->Stop(); }
 
     switch (message) {
     case WM_KEYDOWN:
@@ -99,7 +96,7 @@ LRESULT Win64App::WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
             graphics_engine->camera_rb.thurster_activation = true;
             if (graphics_engine->camera_rb.fuel > 0) 
             {
-                audio_engine.thruster->SetVolume(DSBVOLUME_MAX);  
+                audio_engine.thruster->SetVolume(-2000);  
             }
         };
 
@@ -111,7 +108,7 @@ LRESULT Win64App::WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
             graphics_engine->camera_rb.yaw_right) 
         {
 
-            audio_engine.rcs->SetVolume(DSBVOLUME_MAX);
+            audio_engine.rcs->SetVolume(-2000);
         }
         return 0;
     case WM_KEYUP:
