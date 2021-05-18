@@ -17,6 +17,7 @@ Win64App::Win64App(DX12GraphicsEngine* Engine, UINT Width, UINT Height, HINSTANC
     windowClass.hCursor = LoadCursor(NULL, IDC_ARROW);
     windowClass.hIcon = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_SPLOXICON));
     windowClass.hIconSm = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_SPLOXICON));
+    windowClass.hbrBackground = (HBRUSH)(COLOR_GRAYTEXT+1);
     windowClass.lpszClassName = L"DXSampleClass";
     RegisterClassEx(&windowClass);
 
@@ -30,7 +31,7 @@ Win64App::Win64App(DX12GraphicsEngine* Engine, UINT Width, UINT Height, HINSTANC
         nullptr, // We have no parent window.
         nullptr, // We aren't using menus.
         hInstance,
-        NULL);//might be bad
+        nullptr);//might be bad
 
     /* Pass window handle to graphics engine and Initialize*/
     graphics_engine->render_window = window_handle;
@@ -67,6 +68,7 @@ int Win64App::Run() {
             TranslateMessage(&msg);
             DispatchMessage(&msg);
         }
+
     }
     return static_cast<char>(msg.wParam);
 }

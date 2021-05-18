@@ -8,7 +8,7 @@ DX12GraphicsEngine::DX12GraphicsEngine() :
 	last_update = clock.now();
 	camera_constant.world_view_proj = Identity4x4();
 	camera_rb.orientation = { 0, 0, 0 };
-	camera_rb.position = { 0, 400, -2 };
+	camera_rb.position = { 0, 100, -2 };
 	camera_rb.velocity = { 0, -5, 0 };
 	camera_rb.mass = 1200.0f;
 	camera_rb.forces.clear();
@@ -31,12 +31,12 @@ DX12GraphicsEngine::DX12GraphicsEngine() :
 
 	paused = false;
 
-	MOON_SIZE = 5000.0f;
+	MOON_SIZE = 50000.0f;
 	MOON_COLOR = { 0.8f,0.8f,0.8f, 1.0f };
 	CRATER_COLOR = { 0.2f, 0.2f, 0.2f, 1.0f };
 	CABIN_COLOR = { 0.6f, 0.7f, 0.7f, 1.0f };
 	FUEL_COLOR = { 1.0f, 0.0f, 0.0f, 1.0f};
-	NUM_CRATERS = 500;
+	NUM_CRATERS = 5000;
 	XMVECTOR moon_gravity = XMVectorSet(0.0f, -1.62f, 0.0f, 0.0f);
 	camera_rb.AddConstantForce(moon_gravity);
 	
@@ -64,7 +64,6 @@ void DX12GraphicsEngine::Update() {
 		}
 	}
 	if (!paused) {
-
 		if (first_update) {
 			last_update = clock.now();
 			first_update = false;
@@ -567,7 +566,7 @@ void DX12GraphicsEngine::InitAssets() {
 	{
 		std::vector<Vertex> all_verts;
 
-		std::vector<Vertex> triangle_vertices =
+		std::vector<Vertex> moon_surface =
 		{
 			//moon ground
 			Vertex( { MOON_SIZE, 0.0f, MOON_SIZE }, MOON_COLOR ),
@@ -580,13 +579,15 @@ void DX12GraphicsEngine::InitAssets() {
 
 		};
 
-		all_verts.insert(all_verts.end(), triangle_vertices.begin(), triangle_vertices.end());
+		all_verts.insert(all_verts.end(), moon_surface.begin(), moon_surface.end());
 		std::vector<Vertex> crater_verts;
-		for (int i = 0, end = NUM_CRATERS; i < end; ++i) {
-			crater_verts.clear();
-			crater_verts = GenerateCraterAtPos(10.0f + 5.0f * (rand() / static_cast<float>(RAND_MAX) - 0.5f), { (rand() / static_cast<float>(RAND_MAX) -0.5f) * 6000.0f , (rand() / static_cast<float>(RAND_MAX) - 0.5f) * 6000.0f }, CRATER_COLOR);
-			all_verts.insert(all_verts.end(), crater_verts.begin(), crater_verts.end());
+		crater_verts.reserve(6 * NUM_CRATERS);
+		std::vector<Vertex> tmp_verts;
+		for (int i = 0; i < NUM_CRATERS; i++) {
+			tmp_verts = GenerateCraterAtPos(10.0f + 5.0f * (rand() / static_cast<float>(RAND_MAX) - 0.5f), { (rand() / static_cast<float>(RAND_MAX) -0.5f) * 6000.0f , (rand() / static_cast<float>(RAND_MAX) - 0.5f) * 6000.0f }, CRATER_COLOR);
+			crater_verts.insert(crater_verts.end(), tmp_verts.begin(), tmp_verts.end());
 		}
+		all_verts.insert(all_verts.end(), crater_verts.begin(), crater_verts.end());
 	
 		num_scene_triangle_verts = all_verts.size();
 
@@ -616,8 +617,7 @@ void DX12GraphicsEngine::InitAssets() {
 		
 	};
 
-	/* Create the HUD Vertex Buffer */
-	//line stuff
+	/* Hud Lines*/	
 	{
 		Vertex line_vertices[] =
 		{
@@ -663,10 +663,7 @@ void DX12GraphicsEngine::InitAssets() {
 	}
 
 
-	///////////////////////////////////////////////////////////////////////////////////
-	//triangle stuff
-	///////////////////////////////////////////////////////////////////////////////////
-
+	/* Hud Triangles */
 	{
 		Vertex triangle_vertices[] =
 		{

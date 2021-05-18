@@ -15,6 +15,7 @@ public:
 	void Render(); //draw and present to render window
 	void Destroy();
 	RigidBody camera_rb;
+	bool paused;
 private:
 	//"settings"
 	static const UINT num_frame_resources;
@@ -123,7 +124,7 @@ private:
 	std::chrono::high_resolution_clock::time_point last_update;
 
 	bool first_update;
-	bool paused;
+
 };
 
 inline XMFLOAT4X4 Identity4x4() {
